@@ -1,6 +1,6 @@
 # MHYY-AutoCheckin
 
-![MHYY-AutoCheckin](https://socialify.git.ci/ElainaMoe/MHYY-AutoCheckin/image?forks=1&language=1&name=1&owner=1&stargazers=1&theme=Light)
+![MHYY-AutoCheckin](https://socialify.git.ci/GamerNoTitle/MHYY/image?forks=1&language=1&name=1&owner=1&stargazers=1&theme=Light)
 
 [米哈云游（云原神）](https://mhyy.mihoyo.com/)自动签到脚本
 
@@ -39,4 +39,4 @@
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/ElainaMoe/MHYY-AutoCheckin.svg)](https://starchart.cc/ElainaMoe/MHYY-AutoCheckin)
+[![Stargazers over time](https://starchart.cc/GamerNoTitle/MHYY.svg)](https://starchart.cc/GamerNoTitle/MHYY)
