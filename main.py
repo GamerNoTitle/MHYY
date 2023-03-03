@@ -91,42 +91,45 @@ if __name__ == '__main__':
     print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
     time.sleep(wait_time)
     wallet = r.get(WalletURL, headers=headers)
-    print(
-        f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
-    announcement = r.get(AnnouncementURL, headers=headers)
-    print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
-    res = r.get(NotificationURL, headers=headers)
-    success,Signed = False,False
-    try:
-        if list(json.loads(res.text)['data']['list']) == []:
-            success = True
-            Signed = True
-            Over = False
-        elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励"}:
-            success = True
-            Signed = False
-            Over = False
-        elif json.loads(json.loads(res.text)['data']['list'][0]['msg'])['over_num'] > 0:
-            success = True
-            Signed = False
-            Over = True
-        else:
-            success = False
-    except IndexError:
-        success = False
-    if success:
-        if Signed:
-            print(
-                f'获取签到情况成功！今天是否已经签到过了呢？')
-            print(f'完整返回体为：{res.text}')
-        elif not Signed and Over:
-            print(
-                f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
-            print(f'完整返回体为：{res.text}')
-        else:
-            print(
-                f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
-            print(f'完整返回体为：{res.text}')
+    if wallet.text == {"data":null,"message":"登录已失效，请重新登录","retcode":-100}: 
+        print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}'
     else:
-        raise RunError(
-            f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")
+        print(
+            f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
+        announcement = r.get(AnnouncementURL, headers=headers)
+        print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
+        res = r.get(NotificationURL, headers=headers)
+        success,Signed = False,False
+        try:
+            if list(json.loads(res.text)['data']['list']) == []:
+                success = True
+                Signed = True
+                Over = False
+            elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励"}:
+                success = True
+                Signed = False
+                Over = False
+            elif json.loads(json.loads(res.text)['data']['list'][0]['msg'])['over_num'] > 0:
+                success = True
+                Signed = False
+                Over = True
+            else:
+                success = False
+        except IndexError:
+            success = False
+        if success:
+            if Signed:
+                print(
+                    f'获取签到情况成功！今天是否已经签到过了呢？')
+                print(f'完整返回体为：{res.text}')
+            elif not Signed and Over:
+                print(
+                    f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                print(f'完整返回体为：{res.text}')
+            else:
+                print(
+                    f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                print(f'完整返回体为：{res.text}')
+        else:
+            raise RunError(
+                f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")
