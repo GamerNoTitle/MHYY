@@ -92,7 +92,7 @@ if __name__ == '__main__':
     time.sleep(wait_time)
     wallet = r.get(WalletURL, headers=headers)
     if wallet.text == {"data":null,"message":"登录已失效，请重新登录","retcode":-100}: 
-        print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}'
+        print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')
     else:
         print(
             f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
