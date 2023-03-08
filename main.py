@@ -31,8 +31,8 @@ class RunError(Exception):
 token = config['token']
 client_type = config['type']
 try:
-    ver_info = r.get('https://api-cloudgame-static.mihoyo.com/hk4e_cg_cn/gamer/api/getFunctionShieldNew?client_type=1').text
-    version = json.loads(ver_info)['data']['config']['cg.key_function_controller']['versions'][-1]
+    ver_info = r.get('https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/resource?key=eYd89JmJ&launcher_id=18').text
+    version = json.loads(ver_info)['data']['game']['latest']['version']
     print(f'从官方API获取到云·原神最新版本号：{version}')
 except:
     version = config['version']
