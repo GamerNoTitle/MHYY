@@ -105,7 +105,7 @@ if __name__ == '__main__':
                 success = True
                 Signed = True
                 Over = False
-            elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励"}:
+            elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励", "func_type": 1}:
                 success = True
                 Signed = False
                 Over = False
