@@ -1,13 +1,27 @@
 import requests as r
 import json
+import os
 import re
 import urllib3
-import time
+import sentry_sdk
 import random
+import time
 
-with open('./config.json', 'rt') as f:   # SCF config loader
-    config = json.loads(f.read())
-    f.close()
+# with open('./config.json', 'rt') as f:   # Local debugging
+#     config = json.loads(f.read())
+#     f.close()
+
+sentry_sdk.init(
+    "https://425d7b4536f94c9fa540fe34dd6609a2@o361988.ingest.sentry.io/6352584",
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0
+)
+
+# Running in Github Action, use this to get the config
+config = json.loads(os.environ.get('config'))
 
 
 class RunError(Exception):
@@ -17,8 +31,8 @@ class RunError(Exception):
 token = config['token']
 client_type = config['type']
 try:
-    ver_info = r.get('https://api-cloudgame-static.mihoyo.com/hk4e_cg_cn/gamer/api/getFunctionShieldNew?client_type=1').text
-    version = json.loads(ver_info)['data']['config']['cg.key_function_controller']['versions'][-1]
+    ver_info = r.get('https://sdk-static.mihoyo.com/hk4e_cn/mdk/launcher/api/resource?key=eYd89JmJ&launcher_id=18', timeout=60).text
+    version = json.loads(ver_info)['data']['game']['latest']['version']
     print(f'从官方API获取到云·原神最新版本号：{version}')
 except:
     version = config['version']
@@ -27,7 +41,6 @@ deviceid = config['deviceid']
 devicename = config['devicename']
 devicemodel = config['devicemodel']
 appid = config['appid']
-analytics = config['analytics']
 
 bbsid = re.findall(r'oi=[0-9]+', token)[0].replace('oi=', '')
 
@@ -51,7 +64,6 @@ headers = {
     'User-Agent': 'okhttp/4.9.0'
 }
 
-
 def handler(*args):
     if config == '':
         # Verify config
@@ -60,59 +72,49 @@ def handler(*args):
     else:
         if token == '' or android == 0 or deviceid == '' or devicemodel == '' or appid == 0:
             raise RunError(f'请确认您的配置文件配置正确再运行本程序！')
-    if analytics:
-        try:
-            # Disable SSL warning of analytics server
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            ana = r.get(
-                f'https://analytics.api.ninym.top/mhyy?type={client_type}&version={version}&android={android}&deviceid={deviceid}&devicename={devicename}&devicemodel={devicemodel}&appid={appid}&bbsid={bbsid}', verify=False)
-            if json.loads(ana.text)['msg'] == 'OK':
-                print('统计信息提交成功，感谢你的支持！')
-            elif json.loads(ana.text)['msg'] == 'Duplicated':
-                print('你的统计信息已经提交过啦！感谢你的支持！')
-            else:
-                print(f'[WARN] 统计信息提交错误：{ana.text}')
-        except Exception as e:
-            print(f'提交失败！{e}')
-    wait_time = random.randint(1, 300)  # Random wait time
+    wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
     print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
-    time.sleep(wait_time)   # Wait for random time to avoid ban
-    wallet = r.get(WalletURL, headers=headers)
-    print(
-        f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
-    announcement = r.get(AnnouncementURL, headers=headers)
-    print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
-    res = r.get(NotificationURL, headers=headers)
-    try:
-        if list(json.loads(res.text)['data']['list']) == []:
-            success = True
-            Signed = True
-            Over = False
-        elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励"}:
-            success = True
-            Signed = False
-            Over = False
-        elif json.loads(json.loads(res.text)['data']['list'][0]['msg'])['over_num'] > 0:
-            success = True
-            Signed = False
-            Over = True
-        else:
-            success = False
-    except IndexError:
-        success = False
-    if success:
-        if Signed:
-            print(
-                f'获取签到情况成功！今天是否已经签到过了呢？')
-            print(f'完整返回体为：{res.text}')
-        elif not Signed and Over:
-            print(
-                f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
-            print(f'完整返回体为：{res.text}')
-        else:
-            print(
-                f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
-            print(f'完整返回体为：{res.text}')
+    time.sleep(wait_time)
+    wallet = r.get(WalletURL, headers=headers, timeout=60)
+    if json.loads(wallet.text) == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
+        print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')
     else:
-        raise RunError(
-            f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")
+        print(
+            f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
+        announcement = r.get(AnnouncementURL, headers=headers, timeout=60)
+        print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
+        res = r.get(NotificationURL, headers=headers, timeout=60)
+        success,Signed = False,False
+        try:
+            if list(json.loads(res.text)['data']['list']) == []:
+                success = True
+                Signed = True
+                Over = False
+            elif json.loads(json.loads(res.text)['data']['list'][0]['msg']) == {"num": 15, "over_num": 0, "type": 2, "msg": "每日登录奖励", "func_type": 1}:
+                success = True
+                Signed = False
+                Over = False
+            elif json.loads(json.loads(res.text)['data']['list'][0]['msg'])['over_num'] > 0:
+                success = True
+                Signed = False
+                Over = True
+            else:
+                success = False
+        except IndexError:
+            success = False
+        if success:
+            if Signed:
+                print(
+                    f'获取签到情况成功！今天是否已经签到过了呢？')
+                print(f'完整返回体为：{res.text}')
+            elif not Signed and Over:
+                print(
+                    f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                print(f'完整返回体为：{res.text}')
+            else:
+                print(
+                    f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                print(f'完整返回体为：{res.text}')
+        else:
+            raise RunError(
+                f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")

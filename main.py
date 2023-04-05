@@ -76,7 +76,7 @@ if __name__ == '__main__':
     print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
     time.sleep(wait_time)
     wallet = r.get(WalletURL, headers=headers, timeout=60)
-    if wallet.text == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
+    if json.loads(wallet.text) == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
         print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')
     else:
         print(
