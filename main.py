@@ -23,6 +23,13 @@ sentry_sdk.init(
 # Running in Github Action, use this to get the config
 config = json.loads(os.environ.get('config'))
 
+# Options
+sct_status = os.environ.get('sct')  # https://sct.ftqq.com/
+sct_key = os.environ.get('sct_key')
+sct_url = f'https://sctapi.ftqq.com/{sct_key}.send?title=MHYY-AutoCheckin 自动推送'
+
+sct_msg = ''
+
 
 class RunError(Exception):
     pass
@@ -78,9 +85,11 @@ if __name__ == '__main__':
     wallet = r.get(WalletURL, headers=headers, timeout=60)
     if json.loads(wallet.text) == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
         print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')
+        sct_msg += f'当前登录已过期，请重新登陆！返回为：{wallet.text}'
     else:
         print(
             f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚")
+        sct_msg += f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚"
         announcement = r.get(AnnouncementURL, headers=headers, timeout=60)
         print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
         res = r.get(NotificationURL, headers=headers, timeout=60)
@@ -106,15 +115,25 @@ if __name__ == '__main__':
             if Signed:
                 print(
                     f'获取签到情况成功！今天是否已经签到过了呢？')
+                sct_msg += f'获取签到情况成功！今天是否已经签到过了呢？'
                 print(f'完整返回体为：{res.text}')
             elif not Signed and Over:
                 print(
                     f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                sct_msg += f'获取签到情况成功！当前免费时长已经达到上限！签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}'
                 print(f'完整返回体为：{res.text}')
             else:
                 print(
                     f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
+                sct_msg += f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}'
                 print(f'完整返回体为：{res.text}')
         else:
             raise RunError(
                 f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")
+    if sct_status:
+        res = r.post(sct_url, json={'title': '', 'short': 'MHYY-AutoCheckin 签到情况报告', 'desp': sct_msg}, timeout=30)
+        if res.status_code == 200:
+            print('sct推送完成！')
+        else:
+            print('sct无法推送')
+            print(res.text)
