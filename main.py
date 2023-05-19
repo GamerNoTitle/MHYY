@@ -48,7 +48,7 @@ try:
     version = json.loads(ver_info)['data']['game']['latest']['version']
     print(f'从官方API获取到云·原神最新版本号：{version}')
 except:
-    version = '3.8.0'
+    version = '3.0.0'
 
 NotificationURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/listNotifications?status=NotificationStatusUnread&type=NotificationTypePopup&is_sort=true'
 WalletURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/wallet/wallet/get'
