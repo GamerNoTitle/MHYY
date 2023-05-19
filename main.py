@@ -28,6 +28,7 @@ elif type(conf) == type(dict()):
     ls = []
     ls.append(conf)
     conf = ls
+print(f'检测到 {len(conf)} 个账号，正在进行任务……')
 
 
 # Options
