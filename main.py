@@ -21,7 +21,12 @@ sentry_sdk.init(
 )
 
 # Running in Github Action, use this to get the config
-conf = json.loads(os.environ.get('config'))
+# conf = json.loads(os.environ.get('config'))
+
+# Running locally, use this to get the config
+with open('config.json') as f:
+    conf = json.loads(f.read())
+    
 if type(conf) == type(list()):
     pass
 elif type(conf) == type(dict()):
@@ -75,12 +80,16 @@ if __name__ == '__main__':
             'x-rpc-client_type': str(client_type),
             'x-rpc-app_version': str(version),
             'x-rpc-sys_version': str(android),  # Previous version need to convert the type of this var
-            'x-rpc-channel': 'mihoyo',
+            'x-rpc-channel': 'cyydmihoyo',
             'x-rpc-device_id': deviceid,
             'x-rpc-device_name': devicename,
             'x-rpc-device_model': devicemodel,
-            'x-rpc-app_id': str(appid),
-            'Referer': 'https://app.mihoyo.com',
+            'x-rpc-app_id': '1953439974',
+            'x-rpc-vendor_id': '1', # 2023/8/31更新，不知道作用
+            'x-rpc-cg_game_biz': 'hk4e_cn', # 游戏频道，国服就是这个
+            'x-rpc-op_biz': 'clgm_cn',  # 2023/8/31更新，不知道作用
+            'x-rpc-language': 'zh-cn',
+            # 'Referer': 'https://app.mihoyo.com',
             'Host': 'api-cloudgame.mihoyo.com',
             'Connection': 'Keep-Alive',
             'Accept-Encoding': 'gzip',
