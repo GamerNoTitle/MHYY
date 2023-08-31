@@ -21,12 +21,12 @@ sentry_sdk.init(
 )
 
 # Running in Github Action, use this to get the config
-# conf = json.loads(os.environ.get('config'))
+conf = json.loads(os.environ.get('config'))
 
 # Running locally, use this to get the config
-with open('config.json') as f:
-    conf = json.loads(f.read())
-    
+# with open('config.json') as f:
+#     conf = json.loads(f.read())
+
 if type(conf) == type(list()):
     pass
 elif type(conf) == type(dict()):
