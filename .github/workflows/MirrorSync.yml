@@ -1,4 +1,4 @@
-name: 'KeepActionAlive'
+name: 'SyncMirror'
 
 on:
   workflow_dispatch:
