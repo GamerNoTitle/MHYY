@@ -2,15 +2,30 @@ import requests as r
 import json
 import os
 import re
-import urllib3
 import sentry_sdk
 import random
 import time
 
-# with open('./config.json', 'rt') as f:   # Local debugging
-#     config = json.loads(f.read())
-#     f.close()
+import os
+import yaml
+from pprint import pprint
 
+def ReadConf(variable_name, default_value=None):
+    # Try to get the variable from the environment
+    env_value = os.environ.get(variable_name)
+
+    if env_value is not None:
+        config_data = yaml.load(env_value, Loader=yaml.FullLoader)
+        return config_data
+
+    # If not found in environment, try to read from config.yml
+    try:
+        with open("config.yml", "r", encoding='utf-8') as config_file:
+            config_data = yaml.load(config_file, Loader=yaml.FullLoader)
+            return config_data
+    except FileNotFoundError:
+        return default_value
+    
 sentry_sdk.init(
     "https://425d7b4536f94c9fa540fe34dd6609a2@o361988.ingest.sentry.io/6352584",
 
@@ -20,28 +35,20 @@ sentry_sdk.init(
     traces_sample_rate=1.0
 )
 
-# Running in Github Action, use this to get the config
-conf = json.loads(os.environ.get('config'))
+conf = ReadConf('MHYY_CONFIG')['accounts']
 
-# Running locally, use this to get the config
-# with open('config.json') as f:
-#     conf = json.loads(f.read())
-
-if type(conf) == type(list()):
-    pass
-elif type(conf) == type(dict()):
-    ls = []
-    ls.append(conf)
-    conf = ls
+if not conf:
+    print('请正确配置环境变量或者config.yml后再运行本脚本！')
+    os._exit(0)
 print(f'检测到 {len(conf)} 个账号，正在进行任务……')
 
 
 # Options
-sct_status = os.environ.get('sct')  # https://sct.ftqq.com/
-sct_key = os.environ.get('sct_key')
-sct_url = f'https://sctapi.ftqq.com/{sct_key}.send?title=MHYY-AutoCheckin 自动推送'
+# sct_status = os.environ.get('sct')  # https://sct.ftqq.com/
+# sct_key = os.environ.get('sct_key')
+# sct_url = f'https://sctapi.ftqq.com/{sct_key}.send?title=MHYY-AutoCheckin 自动推送'
 
-sct_msg = ''
+# sct_msg = ''
 
 
 class RunError(Exception):
@@ -53,7 +60,7 @@ try:
     version = json.loads(ver_info)['data']['game']['latest']['version']
     print(f'从官方API获取到云·原神最新版本号：{version}')
 except:
-    version = '3.0.0'
+    version = '4.3.0'
 
 NotificationURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/listNotifications?status=NotificationStatusUnread&type=NotificationTypePopup&is_sort=true'
 WalletURL = 'https://api-cloudgame.mihoyo.com/hk4e_cg_cn/wallet/wallet/get'
@@ -68,37 +75,33 @@ if __name__ == '__main__':
         else:
             token = config['token']
             client_type = config['type']
-            android = config['android']
+            sysver = config['sysver']
             deviceid = config['deviceid']
             devicename = config['devicename']
             devicemodel = config['devicemodel']
             appid = config['appid']
-            if token == '' or android == 0 or deviceid == '' or devicemodel == '' or appid == 0:
-                raise RunError(f'请确认您的配置文件配置正确再运行本程序！')
         headers = {
             'x-rpc-combo_token': token,
             'x-rpc-client_type': str(client_type),
             'x-rpc-app_version': str(version),
-            'x-rpc-sys_version': str(android),  # Previous version need to convert the type of this var
+            'x-rpc-sys_version': str(sysver),  # Previous version need to convert the type of this var
             'x-rpc-channel': 'cyydmihoyo',
             'x-rpc-device_id': deviceid,
             'x-rpc-device_name': devicename,
             'x-rpc-device_model': devicemodel,
-            'x-rpc-app_id': '1953439974',
             'x-rpc-vendor_id': '1', # 2023/8/31更新，不知道作用
             'x-rpc-cg_game_biz': 'hk4e_cn', # 游戏频道，国服就是这个
             'x-rpc-op_biz': 'clgm_cn',  # 2023/8/31更新，不知道作用
             'x-rpc-language': 'zh-cn',
-            # 'Referer': 'https://app.mihoyo.com',
             'Host': 'api-cloudgame.mihoyo.com',
             'Connection': 'Keep-Alive',
             'Accept-Encoding': 'gzip',
-            'User-Agent': 'okhttp/4.9.0'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0'
         }
         bbsid = re.findall(r'oi=[0-9]+', token)[0].replace('oi=', '')
-        wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
-        print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
-        time.sleep(wait_time)
+        # wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
+        # print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
+        # time.sleep(wait_time)
         wallet = r.get(WalletURL, headers=headers, timeout=60)
         if json.loads(wallet.text) == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
             print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')

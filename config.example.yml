@@ -1,0 +1,45 @@
+# 使用前请阅读文档：https://bili33.top/posts/MHYY-AutoCheckin-Manual/
+# 有问题请前往Github开启issue：https://github.com/GamerNoTitle/MHYY/issues
+
+######## 以下为账号配置项，可以多账号，详情请参考文档 ########
+accounts:
+  # 第一个账号
+  - token: 
+    # 关于type：如果你在安卓版的云·原神里面抓的话type应该是2
+    # 如果你是网页版抓的，那type应该是16
+    # 此处仅供参考，具体以你抓的为准 
+    type: 
+    # sysver：如果你是安卓版抓的，这个应该会显示你的安卓版本（鸿蒙不清楚，手上没设备）
+    # 如果你是网页版抓的，这个应该是你的系统版本（注：Windows 10和Windows 11都是写的Windows 10）
+    sysver: 
+    # deviceid：手机抓的会有这个，抓到什么填什么
+    # 如果是网页版抓的，直接留空
+    deviceid: 
+    # devicename: 手机抓的话就是手机的入网型号，如红米K40为M2012K11AC，红米K50为22021211RC
+    # 如果是网页版抓的，填Unknown
+    devicename: 
+    # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
+    # 如果是网页版抓的，填Unknown
+    devicemodel: 
+    # appid: 手机抓的固定填1953439974，网页版抓的留空
+    appid: 
+  # 第二个账号，不需要的话把下面删掉，如果需要更多就在下面再加
+  - token:
+    # 关于type：如果你在安卓版的云·原神里面抓的话type应该是2
+    # 如果你是网页版抓的，那type应该是16
+    # 此处仅供参考，具体以你抓的为准 
+    type: 
+    # sysver：如果你是安卓版抓的，这个应该会显示你的安卓版本（鸿蒙不清楚，手上没设备）
+    # 如果你是网页版抓的，这个应该是你的系统版本（注：Windows 10和Windows 11都是写的Windows 10）
+    sysver: 
+    # deviceid：手机抓的会有这个，抓到什么填什么
+    # 如果是网页版抓的，直接留空
+    deviceid: 
+    # devicename: 手机抓的话就是手机的入网型号，如红米K40为M2012K11AC，红米K50为22021211RC
+    # 如果是网页版抓的，填Unknown
+    devicename: 
+    # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
+    # 如果是网页版抓的，填Unknown
+    devicemodel: 
+    # appid: 手机抓的固定填1953439974，网页版抓的留空
+    appid: 
