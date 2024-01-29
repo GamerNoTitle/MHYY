@@ -10,11 +10,9 @@
 
 ## 快速开始
 
-请参阅[文档](https://bili33.top/posts/MHYY-AutoCheckin-Manual/)进行配置，有问题请在issue中提出。
+请参阅[文档](https://bili33.top/posts/MHYY-AutoCheckin-Manual-Gen2/)进行配置，有问题请在issue中提出。
 
-备用文档地址：https://blog.ninym.top/posts/MHYY-AutoCheckin-Manual/
-
-如果本仓库被封了就来这里找https://gogs.console.bili33.top/explore/repos
+如果本仓库被封了就来这里找https://git.bili33.top/GamerNoTitle/MHYY
 
 **要是真的不会用就别不好意思开issue问啦，我在Sentry的后台看到了一堆不知道怎么形容的Bug**
 
