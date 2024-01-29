@@ -1,4 +1,4 @@
-# 使用前请阅读文档：https://bili33.top/posts/MHYY-AutoCheckin-Manual/
+# 使用前请阅读文档：https://bili33.top/posts/MHYY-AutoCheckin-Manual-Gen2/
 # 有问题请前往Github开启issue：https://github.com/GamerNoTitle/MHYY/issues
 
 ######## 以下为账号配置项，可以多账号，详情请参考文档 ########
@@ -13,7 +13,7 @@ accounts:
     # 如果你是网页版抓的，这个应该是你的系统版本（注：Windows 10和Windows 11都是写的Windows 10）
     sysver: 
     # deviceid：手机抓的会有这个，抓到什么填什么
-    # 如果是网页版抓的，直接留空
+    # 如果是网页版抓的，那也是抓到什么填什么
     deviceid: 
     # devicename: 手机抓的话就是手机的入网型号，如红米K40为M2012K11AC，红米K50为22021211RC
     # 如果是网页版抓的，填Unknown
@@ -33,7 +33,7 @@ accounts:
     # 如果你是网页版抓的，这个应该是你的系统版本（注：Windows 10和Windows 11都是写的Windows 10）
     sysver: 
     # deviceid：手机抓的会有这个，抓到什么填什么
-    # 如果是网页版抓的，直接留空
+    # 如果是网页版抓的，那也是抓到什么填什么
     deviceid: 
     # devicename: 手机抓的话就是手机的入网型号，如红米K40为M2012K11AC，红米K50为22021211RC
     # 如果是网页版抓的，填Unknown
