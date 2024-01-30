@@ -5,10 +5,7 @@ import re
 import sentry_sdk
 import random
 import time
-
-import os
 import yaml
-from pprint import pprint
 
 def ReadConf(variable_name, default_value=None):
     # Try to get the variable from the environment
@@ -99,9 +96,9 @@ if __name__ == '__main__':
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0'
         }
         bbsid = re.findall(r'oi=[0-9]+', token)[0].replace('oi=', '')
-        # wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
-        # print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
-        # time.sleep(wait_time)
+        wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
+        print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
+        time.sleep(wait_time)
         wallet = r.get(WalletURL, headers=headers, timeout=60)
         if json.loads(wallet.text) == {"data": None,"message":"登录已失效，请重新登录","retcode":-100}: 
             print(f'当前登录已过期，请重新登陆！返回为：{wallet.text}')
