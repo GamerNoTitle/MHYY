@@ -44,11 +44,11 @@ print(f'检测到 {len(conf)} 个账号，正在进行任务……')
 
 
 # Options
-# sct_status = os.environ.get('sct')  # https://sct.ftqq.com/
-# sct_key = os.environ.get('sct_key')
-# sct_url = f'https://sctapi.ftqq.com/{sct_key}.send?title=MHYY-AutoCheckin 自动推送'
+sct_status = os.environ.get('sct')  # https://sct.ftqq.com/
+sct_key = os.environ.get('sct_key')
+sct_url = f'https://sctapi.ftqq.com/{sct_key}.send?title=MHYY-AutoCheckin 自动推送'
 
-# sct_msg = ''
+sct_msg = ''
 
 
 class RunError(Exception):
