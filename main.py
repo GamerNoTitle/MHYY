@@ -144,6 +144,14 @@ if __name__ == '__main__':
                         f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}')
                     sct_msg += f'获取签到情况成功！当前签到情况为{json.loads(res.text)["data"]["list"][0]["msg"]}'
                     print(f'完整返回体为：{res.text}')
+                print('正在尝试清除15分钟弹窗……')
+                for popout in json.loads(res.text)['data']['list']:
+                    popid = popout['id']
+                    clear_result = r.post('https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/ackNotification', headers=headers, data={'id': popid})
+                    if clear_result.status_code == 200 and clear_result.json()['msg'] == 'OK':
+                        print(f'已清除id为{popid}的弹窗！')
+                    else:
+                        print(f'清除弹窗失败！错误信息为：{clear_result.text}')
             else:
                 raise RunError(
                     f"签到失败！请带着本次运行的所有log内容到 https://github.com/ElainaMoe/MHYY-AutoCheckin/issues 发起issue解决（或者自行解决）。签到出错，返回信息如下：{res.text}")
