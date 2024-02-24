@@ -30,6 +30,6 @@ jobs:
         pip install -r requirements.txt
     - name: Run script
       env:
-        config: ${{ secrets.config }}
+        config: ${{ secrets.MHYY_CONFIG }}
       run: |
         python3 main.py
