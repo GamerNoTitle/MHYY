@@ -6,6 +6,8 @@
 
 **⚠️请不要进行宣传，谢谢！一旦发现宣传就删库跑路！使用过程中如果出现bug可能会使用您的日志进行错误追踪，详情请见[隐私政策](https://github.com/ElainaMoe/MHYY-AutoCheckin/blob/master/private-policy.md)**
 
+**要用Action跑请不要点Fork，点Use this template后在自己的号下创建一个仓库来跑，用Fork跑的时间会积累到本仓库，会导致本仓库被封！！！**
+
 这是一个可以帮助你每天自动进行米忽悠云原神签到的脚本，自动获取每日的15分钟（600分钟后无法获取，这是米忽悠定下的规矩，无法突破）
 
 > 云·星穹铁道自动签到脚本https://github.com/GamerNoTitle/SRCloud-AutoCheckin
