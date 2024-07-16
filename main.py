@@ -147,7 +147,7 @@ if __name__ == '__main__':
                 print('正在尝试清除15分钟弹窗……')
                 for popout in json.loads(res.text)['data']['list']:
                     popid = popout['id']
-                    clear_result = r.post('https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/ackNotification', headers=headers, data={'id': str(popid)})
+                    clear_result = r.post('https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/ackNotification', headers=headers, json={'id': str(popid)})
                     try:
                         if clear_result.status_code == 200 and clear_result.json()['msg'] == 'OK':
                             print(f'已清除id为{popid}的弹窗！')
