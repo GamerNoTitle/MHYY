@@ -11,7 +11,7 @@ def ReadConf(variable_name, default_value=None):
     # Try to get the variable from the environment
     env_value = os.environ.get(variable_name)
 
-    if env_value is not None:
+    if env_value:
         config_data = yaml.load(env_value, Loader=yaml.FullLoader)
         return config_data
 
