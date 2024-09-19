@@ -21,8 +21,10 @@ accounts:
     # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
     # 如果是网页版抓的，填Unknown
     devicemodel: 
-    # appid: 手机抓的固定填1953439974，网页版抓的留空
+    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填9000254
     appid: 
+    # region(可选): 账号所处的地区，国服填cn，国际服填os，不填或非法值按国服处理
+    region: cn
   # 第二个账号，不需要的话把下面删掉，如果需要更多就在下面再加
   - token:
     # 关于type：如果你在安卓版的云·原神里面抓的话type应该是2
@@ -41,5 +43,7 @@ accounts:
     # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
     # 如果是网页版抓的，填Unknown
     devicemodel: 
-    # appid: 手机抓的固定填1953439974，网页版抓的留空
+    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填9000254
     appid: 
+    # region(可选): 账号所处的地区，国服填cn，国际服填os，不填或非法值按国服处理
+    region: os
