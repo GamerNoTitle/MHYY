@@ -55,22 +55,20 @@ class RunError(Exception):
 
 
 if __name__ == "__main__":
-    # if not os.environ.get("MHYY_DEBUG", False):
-    #     wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
-    #     print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
-    #     time.sleep(wait_time)
+    if not os.environ.get("MHYY_DEBUG", False):
+        wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
+        print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
+        time.sleep(wait_time)
 
     try:
         ver_info = httpx.get(
-            "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGamePackages?game_ids[]=1Z8W5NHUQb&launcher_id=jGHBHlcOq1",
+            "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameBranches?game_ids[]=1Z8W5NHUQb&launcher_id=jGHBHlcOq1",
             timeout=60,
             verify=False,
         ).text
-        version = json.loads(ver_info)["data"]["game_packages"][0]["main"]["major"][
-            "version"
-        ]
+        version = json.loads(ver_info)["data"]["game_branches"][0]["main"]["tag"]
         print(f"从官方API获取到云·原神最新版本号：{version}")
-    except:
+    except Exception as e:
         version = "5.0.0"
 
     for config in conf:
@@ -122,13 +120,15 @@ if __name__ == "__main__":
             headers["x-rpc-op_biz"] = "clgm_global"
             headers["x-rpc-cg_game_id"] = "9000254"
             headers["x-rpc-app_id"] = "600493"
+            headers["User-Agent"] = "okhttp/4.10.0"
+            headers["Host"] = "sg-cg-api.hoyoverse.com"
             # 国际服URL
             NotificationURL = "https://sg-cg-api.hoyoverse.com/hk4e_global/cg/gamer/api/listNotifications?status=NotificationStatusUnread&type=NotificationTypePopup&is_sort=true"
             WalletURL = (
                 "https://sg-cg-api.hoyoverse.com/hk4e_global/cg/wallet/wallet/get"
             )
             AnnouncementURL = "https://sg-cg-api.hoyoverse.com/hk4e_global/cg/gamer/api/getAnnouncementInfo"
-
+            
         wallet = httpx.get(WalletURL, headers=headers, timeout=60, verify=False)
         print(wallet.text)
         if json.loads(wallet.text) == {
