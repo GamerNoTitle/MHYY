@@ -56,8 +56,8 @@ class RunError(Exception):
 
 if __name__ == "__main__":
     if not os.environ.get("MHYY_DEBUG", False):
-        wait_time = random.randint(1, 3600) # Random Sleep to Avoid Ban
-        print(f'为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒')
+        wait_time = random.randint(1, 3600)  # Random Sleep to Avoid Ban
+        print(f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒")
         time.sleep(wait_time)
 
     try:
@@ -113,7 +113,8 @@ if __name__ == "__main__":
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
         }
         bbsid = re.findall(r"oi=[0-9]+", token)[0].replace("oi=", "")
-        if config.get("region", "cn") == "os":
+        region = config.get("region", "cn")
+        if region == "os":
             # 国际服处理
             headers["x-rpc-channel"] = "mihoyo"
             headers["x-rpc-cg_game_biz"] = "hk4e_global"
@@ -128,7 +129,11 @@ if __name__ == "__main__":
                 "https://sg-cg-api.hoyoverse.com/hk4e_global/cg/wallet/wallet/get"
             )
             AnnouncementURL = "https://sg-cg-api.hoyoverse.com/hk4e_global/cg/gamer/api/getAnnouncementInfo"
-            
+
+        print(
+            f"正在进行第 {conf.index(config) +1 } 个账号，服务器为{'CN' if region != 'os' else 'GLOBAL'}……"
+        )
+
         wallet = httpx.get(WalletURL, headers=headers, timeout=60, verify=False)
         print(wallet.text)
         if json.loads(wallet.text) == {
