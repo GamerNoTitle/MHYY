@@ -21,7 +21,7 @@ accounts:
     # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
     # 如果是网页版抓的，填Unknown
     devicemodel: 
-    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填9000254
+    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填600493
     appid: 
     # region(可选): 账号所处的地区，国服填cn，国际服填os，不填或非法值按国服处理
     region: cn
@@ -43,7 +43,7 @@ accounts:
     # devicemodel: 手机抓的填抓出来的手机型号，大概为手机厂商+上面的deviceid，如红米K40为Xiaomi M2012K11AC
     # 如果是网页版抓的，填Unknown
     devicemodel: 
-    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填9000254
+    # appid: 国服手机抓的固定填1953439974，网页版抓的留空；国际服手机抓的填600493
     appid: 
     # region(可选): 账号所处的地区，国服填cn，国际服填os，不填或非法值按国服处理
     region: os
