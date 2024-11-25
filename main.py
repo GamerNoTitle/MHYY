@@ -1,4 +1,3 @@
-import requests as r
 import httpx
 import json
 import os
@@ -55,10 +54,10 @@ class RunError(Exception):
 
 
 if __name__ == "__main__":
-    if not os.environ.get("MHYY_DEBUG", False):
-        wait_time = random.randint(1, 3600)  # Random Sleep to Avoid Ban
-        print(f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒")
-        time.sleep(wait_time)
+    # if not os.environ.get("MHYY_DEBUG", False):
+    #     wait_time = random.randint(1, 3600)  # Random Sleep to Avoid Ban
+    #     print(f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒")
+    #     time.sleep(wait_time)
 
     try:
         ver_info = httpx.get(
@@ -145,15 +144,16 @@ if __name__ == "__main__":
             sct_msg += f"当前登录已过期，请重新登陆！返回为：{wallet.text}"
         else:
             print(
-                f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚"
+                f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有原点 {json.loads(wallet.text)['data']['coin']['coin_num']} 点（{int(json.loads(wallet.text)['data']['coin']['coin_num'])/10}分钟）"
             )
-            sct_msg += f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有米云币 {json.loads(wallet.text)['data']['coin']['coin_num']} 枚"
+            sct_msg += f"你当前拥有免费时长 {json.loads(wallet.text)['data']['free_time']['free_time']} 分钟，畅玩卡状态为 {json.loads(wallet.text)['data']['play_card']['short_msg']}，拥有原点 {json.loads(wallet.text)['data']['coin']['coin_num']} 点（{int(json.loads(wallet.text)['data']['coin']['coin_num'])/10}分钟）"
             announcement = httpx.get(
                 AnnouncementURL, headers=headers, timeout=60, verify=False
             )
             print(f'获取到公告列表：{json.loads(announcement.text)["data"]}')
             res = httpx.get(NotificationURL, headers=headers, timeout=60, verify=False)
             success, Signed = False, False
+            print(res.text)
             try:
                 if list(json.loads(res.text)["data"]["list"]) == []:
                     success = True
