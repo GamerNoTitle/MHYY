@@ -8,11 +8,11 @@ import time
 import yaml
 import logging
 
-if os.environ.get("MHYY_LOGLEVEL").upper() == "DEBUG":
+if os.environ.get("MHYY_LOGLEVEL", "").upper() == "DEBUG":
     loglevel = logging.DEBUG
-elif os.environ.get("MHYY_LOGLEVEL").upper() == "WARNING":
+elif os.environ.get("MHYY_LOGLEVEL", "").upper() == "WARNING":
     loglevel = logging.WARNING
-elif os.environ.get("MHYY_LOGLEVEL").upper() == "ERROR":
+elif os.environ.get("MHYY_LOGLEVEL", "").upper() == "ERROR":
     loglevel = logging.ERROR
 else:
     loglevel = logging.INFO
