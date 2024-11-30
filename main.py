@@ -8,10 +8,18 @@ import time
 import yaml
 import logging
 
+if os.environ.get("MHYY_LOGLEVEL").upper() == "DEBUG":
+    loglevel = logging.DEBUG
+elif os.environ.get("MHYY_LOGLEVEL").upper() == "WARNING":
+    loglevel = logging.WARNING
+elif os.environ.get("MHYY_LOGLEVEL").upper() == "ERROR":
+    loglevel = logging.ERROR
+else:
+    loglevel = logging.INFO
 
 # 设置日志配置
 logging.basicConfig(
-    level=os.environ.get("MHYY_LOGLEVEL") if os.environ.get("MHYY_LOGLEVEL") else logging.INFO,
+    level=loglevel,
     format="%(asctime)s [%(levelname)s]: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
