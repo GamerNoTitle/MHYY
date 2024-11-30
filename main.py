@@ -11,7 +11,7 @@ import logging
 
 # 设置日志配置
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=os.environ.get("MHYY_LOGLEVEL") if os.environ.get("MHYY_LOGLEVEL") else logging.INFO,
     format="%(asctime)s [%(levelname)s]: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
