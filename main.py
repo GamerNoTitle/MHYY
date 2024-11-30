@@ -11,12 +11,12 @@ import logging
 
 # 设置日志配置
 logging.basicConfig(
-    level=logging.INFO,  # 日志级别设置为INFO，记录INFO级别以上的日志
-    format="%(asctime)s [%(levelname)s]: %(message)s",  # 设置日志的输出格式
-    datefmt="%Y-%m-%d %H:%M:%S",  # 设置时间格式
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s]: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-logger = logging.getLogger()  # 获取日志记录器
+logger = logging.getLogger()
 
 
 def ReadConf(variable_name, default_value=None):
