@@ -219,4 +219,5 @@ if __name__ == "__main__":
             sct_msg += f"执行过程中出错：{str(e)}"
             if sct_key:
                 httpx.get(sct_url, params={"desp": sct_msg})
+            raise RunError(str(e))
     logger.info("所有任务已经执行完毕！")
