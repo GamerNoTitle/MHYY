@@ -174,9 +174,7 @@ if __name__ == "__main__":
                         Signed = True
                         Over = False
                     elif (
-                        json.loads(
-                            json.loads(res.text)["data"]["list"][-1]["msg"]["msg"]
-                        )
+                        json.loads(json.loads(res.text)["data"]["list"][-1]["msg"])["msg"]
                         == "每日登录奖励"
                     ):
                         success = True
