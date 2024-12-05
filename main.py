@@ -70,10 +70,10 @@ class RunError(Exception):
 
 
 if __name__ == "__main__":
-    # if not os.environ.get("MHYY_DEBUG", False):
-    #     wait_time = random.randint(1, 3600)  # Random Sleep to Avoid Ban
-    #     logger.info(f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒")
-    #     time.sleep(wait_time)
+    if not os.environ.get("MHYY_DEBUG", False):
+        wait_time = random.randint(10, 60)  # Random Sleep to Avoid Ban
+        logger.info(f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒")
+        time.sleep(wait_time)
     try:
         ver_info = httpx.get(
             "https://hyp-api.mihoyo.com/hyp/hyp-connect/api/getGameBranches?game_ids[]=1Z8W5NHUQb&launcher_id=jGHBHlcOq1",
@@ -174,7 +174,9 @@ if __name__ == "__main__":
                         Signed = True
                         Over = False
                     elif (
-                        json.loads(json.loads(res.text)["data"]["list"][-1]["msg"])["msg"]
+                        json.loads(json.loads(res.text)["data"]["list"][-1]["msg"])[
+                            "msg"
+                        ]
                         == "每日登录奖励"
                     ):
                         success = True
@@ -211,7 +213,6 @@ if __name__ == "__main__":
                     sct_msg += f"当前没有签到！请稍后再试！"
                 if sct_key:
                     httpx.get(sct_url, params={"desp": sct_msg})
-                time.sleep(random.randint(10, 20))
         except Exception as e:
             logger.error(f"执行过程中出错：{str(e)}")
             sct_msg += f"执行过程中出错：{str(e)}"
