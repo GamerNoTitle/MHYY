@@ -10,7 +10,11 @@
 
 这是一个可以帮助你每天自动进行米忽悠云原神签到的脚本，自动获取每日的15分钟（600分钟后无法获取，这是米忽悠定下的规矩，无法突破）
 
-> 云·星穹铁道自动签到脚本https://github.com/GamerNoTitle/SRCloud-AutoCheckin
+> [!important]
+> ## 孪生项目
+> 云·星穹铁道自动签到脚本 https://github.com/GamerNoTitle/SRCloud-AutoCheckin （Archived）
+> 
+> 云·绝区零自动签到脚本 https://github.com/GamerNoTitle/ZZZCloud-AutoCheckin
 
 ## 快速开始
 
