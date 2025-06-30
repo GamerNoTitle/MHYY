@@ -1,6 +1,19 @@
 # 使用前请阅读文档：https://bili33.top/posts/MHYY-AutoCheckin-Manual-Gen2/
 # 有问题请前往Github开启issue：https://github.com/GamerNoTitle/MHYY/issues
 
+notifications:
+  # Server酱
+  serverchan:
+    key: ""
+  # 钉钉机器人
+  # 安全关键词需要包含 `MHYY`，否则会被钉钉机器人拒绝
+  dingtalk:
+    webhook_url: "https://oapi.dingtalk.com/robot/send?access_token=2b350a189512e1484d54e8b588c163f787ec9c2798725490f92f63d42b1e2b17"
+  # Telegram机器人
+  telegram:
+    bot_token: "6689586847:AAH0lg1uuXiZMsou9WNYif7qqrbCSdZWWj0"
+    chat_id: "1762053255"
+
 ######## 以下为账号配置项，可以多账号，详情请参考文档 ########
 accounts:
   # 第一个账号
