@@ -211,7 +211,9 @@ if __name__ == "__main__":
         logger.warning(f"获取版本号失败，使用默认版本：{version}. Error: {e}")
 
     for config in accounts_conf:
-        notification_msg = "【MHYY】签到状态推送\n\n"  # Message container for the current account
+        notification_msg = (
+            "【MHYY】签到状态推送\n\n"  # Message container for the current account
+        )
 
         # 各种API的URL
         NotificationURL = "https://api-cloudgame.mihoyo.com/hk4e_cg_cn/gamer/api/listNotifications?status=NotificationStatusUnread&type=NotificationTypePopup&is_sort=true"
@@ -233,7 +235,7 @@ if __name__ == "__main__":
         try:
             token = config["token"]
             client_type = config.get("type", 5)
-            sysver = config.get("sysver", "14.0") 
+            sysver = config.get("sysver", "14.0")
             deviceid = config["deviceid"]
             devicename = config.get("devicename", "iPhone 13")
             devicemodel = config.get("devicemodel", "iPhone13,3")
@@ -356,9 +358,7 @@ if __name__ == "__main__":
                         # The logic here was a bit fragile, let's try to be more robust
                         # Look for specific message patterns if possible, or just check the presence of notifications
 
-                        last_notification_msg = notification_list[0].get(
-                            "msg"
-                        )  # Assume the first one is the latest? Or the last one? Original code used [-1]... let's stick to that for now.
+                        last_notification_msg = notification_list[0].get("msg")
                         if len(notification_list) > 0:
                             last_notification_msg = notification_list[-1].get("msg")
 
@@ -369,16 +369,16 @@ if __name__ == "__main__":
                                 f"Parsed last notification msg payload: {msg_payload}"
                             )
 
-                            if msg_payload.get("msg") == "每日登录奖励":
-                                sign_in_status = f"✅ 获取签到情况成功！{msg_payload.get('msg')}：获得 {msg_payload.get('free_time')} 分钟"
+                            if msg_payload.get("msg") == "每日登录奖励" or msg_payload.get("msg") == "每日登陆奖励":
+                                # This indicates a successful sign-in
+                                sign_in_status = f"✅ 获取签到情况成功！{msg_payload.get('msg')}：获得 {msg_payload.get('num')} 分钟"
                                 logger.info(sign_in_status)
                                 notification_msg += sign_in_status + "\n"
                             elif msg_payload.get("over_num", 0) > 0:
-                                sign_in_status = f"✅ 获取签到情况成功！免费时长已达上限，未能获得 {msg_payload.get('free_time')} 分钟 (超出 {msg_payload.get('over_num')} 分钟)"
+                                sign_in_status = f"✅ 获取签到情况成功！免费时长已达上限，只能获得 {msg_payload.get('num')} 分钟 (超出 {msg_payload.get('over_num')} 分钟)"
                                 logger.info(sign_in_status)
                                 notification_msg += sign_in_status + "\n"
                             else:
-                                # Catch-all for other notification types or unexpected payloads
                                 sign_in_status = f"❓ 获取到其他通知，可能已经签到或状态未知: {last_notification_msg}"
                                 logger.info(sign_in_status)
                                 notification_msg += sign_in_status + "\n"
