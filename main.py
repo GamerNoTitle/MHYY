@@ -81,6 +81,10 @@ accounts_conf = full_config.get("accounts")
 notification_settings = full_config.get(
     "notifications", {}
 )  # Get notification settings, default to empty dict
+proxy_settings = full_config.get("proxy")
+
+if proxy_settings:
+    logger.info(f"检测到代理设置: {proxy_settings}")
 
 if not accounts_conf:
     logger.error(
@@ -90,7 +94,7 @@ if not accounts_conf:
 logger.info(f"检测到 {len(accounts_conf)} 个账号，正在进行任务……")
 
 
-def send_notifications(message: str, settings: dict):
+def send_notifications(message: str, settings: dict, proxy: str = None):
     """Sends message to configured notification services."""
     if not message or not settings:
         logger.debug("No message to send or no notification settings configured.")
@@ -163,9 +167,12 @@ def send_notifications(message: str, settings: dict):
                 # For simplicity, sending as plain text. Be careful with special characters if using Markdown/HTML.
                 # "parse_mode": "HTML"
             }
-            response = httpx.get(telegram_url, params=params, timeout=10)
+            logger.info("Sending Telegram notification...")
+            logger.debug(f"Proxy settings: {proxy}")
+            response = httpx.get(telegram_url, params=params, timeout=10, proxy=proxy)
             response.raise_for_status()  # Raise an exception for bad status codes
             result = response.json()
+            logger.info(f"Telegram response: {result}")
             if result.get("ok"):
                 logger.info("Telegram notification sent successfully.")
             else:
@@ -192,7 +199,7 @@ class RunError(Exception):
 
 if __name__ == "__main__":
     if not os.environ.get("MHYY_DEBUG", False):
-        wait_time = random.randint(10, 11)  # Random Sleep to Avoid Ban
+        wait_time = random.randint(1, 2)  # Random Sleep to Avoid Ban
         logger.info(
             f"为了避免同一时间签到人数太多导致被官方怀疑，开始休眠 {wait_time} 秒"
         )
@@ -228,7 +235,7 @@ if __name__ == "__main__":
             logger.error(error_msg)
             notification_msg += error_msg + "\n"
             send_notifications(
-                notification_msg, notification_settings
+                notification_msg, notification_settings, proxy=proxy_settings if proxy_settings else None
             )  # Notify about invalid config
             continue  # Skip this entry
 
@@ -426,6 +433,6 @@ if __name__ == "__main__":
         if accounts_conf.index(config) < len(accounts_conf) - 1:
             notification_msg += "\n---\n\n"
 
-        send_notifications(notification_msg, notification_settings)
+        send_notifications(notification_msg, notification_settings, proxy=proxy_settings if proxy_settings else None)
 
     logger.info("所有任务已经执行完毕！")

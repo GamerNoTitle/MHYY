@@ -1,6 +1,8 @@
 # 使用前请阅读文档：https://bili33.top/posts/MHYY-AutoCheckin-Manual-Gen2/
 # 有问题请前往Github开启issue：https://github.com/GamerNoTitle/MHYY/issues
 
+proxy: 
+
 notifications:
   # Server酱
   serverchan:
