@@ -306,7 +306,7 @@ if __name__ == "__main__":
                     play_card_msg = wallet_data["data"]["play_card"]["short_msg"]
                     coin_num = wallet_data["data"]["coin"]["coin_num"]
                     coin_minutes = int(coin_num) / 10 if coin_num is not None else 0
-                    wallet_status = f"✅ 钱包：免费时长 {free_time} 分钟，畅玩卡状态为 {play_card_msg}，拥有原点 {coin_num} 点 ({coin_minutes:.0f}分钟)\n"
+                    wallet_status = f"✅ 钱包：免费时长 {free_time} 分钟，畅玩卡状态为「{play_card_msg}」，拥有原点 {coin_num} 点 ({coin_minutes:.0f}分钟)\n"
                     logger.info(wallet_status.strip())
                     notification_msg += wallet_status
                 else:
