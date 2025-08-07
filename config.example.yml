@@ -15,6 +15,9 @@ notifications:
   telegram:
     bot_token: "6689586847:AAH0lg1uuXiZMsou9WNYif7qqrbCSdZWWj0"
     chat_id: "1762053255"
+  # PushPlus推送加，https://www.pushplus.plus/
+  pushplus:
+    key: ""
 
 ######## 以下为账号配置项，可以多账号，详情请参考文档 ########
 accounts:
