@@ -153,6 +153,31 @@ def send_notifications(message: str, settings: dict, proxy: str = None):
     else:
         logger.debug("DingTalk not configured.")
 
+    # PushPlus
+    sct_conf = settings.get("pushplus", {})
+    sct_key = sct_conf.get("key")
+    if sct_key:
+        sct_url = f"http://www.pushplus.plus/send/{sct_key}"
+        try:
+            payload = {"title": "MHYY-AutoCheckin 状态推送", "content": message}
+            response = httpx.post(sct_url, data=payload, timeout=10)
+            response.raise_for_status()
+            logger.info("PushPlus notification sent successfully.")
+        except httpx.HTTPStatusError as e:
+            logger.error(
+                f"PushPlus HTTP error occurred: {e.response.status_code} - {e.response.text}"
+            )
+        except httpx.RequestError as e:
+            logger.error(f"An error occurred while requesting PushPlus: {e}")
+        except Exception as e:
+            logger.error(
+                f"An unexpected error occurred sending PushPlus notification: {e}"
+            )
+    else:
+        logger.debug("PushPlus not configured.")
+
+
+    # Telegram
     telegram_conf = settings.get("telegram", {})
     telegram_bot_token = telegram_conf.get("bot_token")
     telegram_chat_id = telegram_conf.get("chat_id")
